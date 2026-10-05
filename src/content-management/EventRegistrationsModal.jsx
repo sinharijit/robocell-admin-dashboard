@@ -16,6 +16,26 @@ import {
 }
 from "@/services/excelService"
 
+// ---------changes ---------------------------
+const formatRegistrationDate = (date) => {
+
+  if (!date) {
+    return "-"
+  }
+
+  if (typeof date?.toDate === "function") {
+    return date.toDate().toLocaleString()
+  }
+
+  if (date instanceof Date) {
+    return date.toLocaleString()
+  }
+
+  return String(date)
+}
+
+// -----------------------changes-----------------
+
 export default function EventRegistrationsModal({
 
   isOpen,
@@ -634,8 +654,12 @@ export default function EventRegistrationsModal({
 
                               {" "}
 
-                              {registration.registrationDate}
-
+                              {/* {registration.registrationDate} */}
+                              
+                              {formatRegistrationDate(
+                                registration.registrationDate
+                              )}
+                              
                             </p>
 
                           </div>
@@ -835,7 +859,11 @@ export default function EventRegistrationsModal({
 
                     {" "}
 
-                    {selectedRegistration.registrationDate}
+                    {/* {selectedRegistration.registrationDate} */}
+
+                    {formatRegistrationDate(
+                      selectedRegistration.registrationDate
+                    )}
 
                   </p>
 
