@@ -145,38 +145,117 @@ export default function EventModal({
       )
     }
 
-  const openEditModal =
-    (event) => {
+  // const openEditModal =
+  //   (event) => {
 
-      setEditingEvent(event)
+  //     setEditingEvent(event)
 
-      setEditForm(event)
+  //     setEditForm(event)
 
-    }
+  //   }
+
+  const openEditModal = (event) => {
+
+    setEditingEvent(event)
+
+    setEditForm({
+      ...event,
+
+      title:
+        event.title || "",
+
+      date:
+        event.date || "",
+
+      venue:
+        event.venue || "",
+
+      shortDescription:
+        event.shortDescription || "",
+
+      longDescription:
+        event.longDescription || "",
+
+      teamSize:
+        event.teamSize ?? 1,
+
+      paymentAmount:
+        event.paymentAmount ?? 0,
+
+      status:
+        event.status || "Registration Open",
+
+      registrationOpen:
+        event.registrationOpen ?? true,
+
+      image:
+        event.image || "",
+
+      paymentImage:
+        event.paymentImage || "",
+
+      order:
+        event.order ?? 1,
+
+    })
+
+  }
 
 
-  const handleEditChange =
-    (e) => {
+  // const handleEditChange =
+  //   (e) => {
 
-      const {
-        name,
-        value,
-        type,
-        checked,
-      } = e.target
+  //     const {
+  //       name,
+  //       value,
+  //       type,
+  //       checked,
+  //     } = e.target
 
-      setEditForm(prev => ({
+  //     setEditForm(prev => ({
 
+  //       ...prev,
+
+  //       [name]:
+  //         type === "checkbox"
+  //           ? checked
+  //           : value,
+
+  //     }))
+
+  //   }
+
+  const handleEditChange = (e) => {
+
+    const {
+      name,
+      value,
+      type,
+      checked,
+    } = e.target
+
+    setEditForm((prev) => {
+
+      const updated = {
         ...prev,
 
         [name]:
           type === "checkbox"
             ? checked
             : value,
+      }
 
-      }))
+      if (name === "status") {
 
-    }
+        updated.registrationOpen =
+          value === "Registration Open"
+
+      }
+
+      return updated
+
+    })
+  }
 
   const handleUpdate =
     async () => {
@@ -964,6 +1043,70 @@ export default function EventModal({
                 onChange={handleEditChange}
                 className="w-full p-3 rounded-xl bg-zinc-900"
               />
+
+              <select
+                name="status"
+                value={editForm.status || ""}
+                onChange={handleEditChange}
+                className="w-full p-3 rounded-xl bg-zinc-900"
+              >
+                <option value="Registration Open">
+                  Registration Open
+                </option>
+
+                <option value="Coming Soon">
+                  Coming Soon
+                </option>
+
+                <option value="Closed">
+                  Closed
+                </option>
+              </select>
+
+              <ImageLinksInput
+                label="Event Banner Link"
+                value={editForm.image || ""}
+                onChange={(value) =>
+                  setEditForm((prev) => ({
+                    ...prev,
+                    image: value,
+                  }))
+                }
+                multiple={false}
+              />
+
+              {editForm.image && (
+                <img
+                  src={editForm.image}
+                  alt="Banner Preview"
+                  className="
+                    w-full
+                    h-40
+                    object-cover
+                    rounded-xl
+                  "
+                />
+              )}
+
+              <ImageLinksInput
+                label="Payment QR Image Link"
+                value={editForm.paymentImage || ""}
+                onChange={(value) =>
+                  setEditForm((prev) => ({
+                    ...prev,
+                    paymentImage: value,
+                  }))
+                }
+                multiple={false}
+              />
+
+              {editForm.paymentImage && (
+                <img
+                  src={editForm.paymentImage}
+                  alt="Payment QR"
+                  className="w-52 rounded-xl"
+                />
+              )}
 
               <div className="flex gap-4">
 
